@@ -1,0 +1,19 @@
+.playfield{
+  width: 310px;
+  height: 310px;
+}
+
+.cell{
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  margin-left: -4px;
+  margin-bottom: -4px;
+  border: 1px solid black;
+  transition: all 5s;
+}
+
+.cell:hover{
+  background-color: green;
+}
