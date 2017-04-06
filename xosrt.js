@@ -36,8 +36,7 @@ window.onload = function() {
 			var currentPcscore = parseInt(pcScoreEle.textContent);
 			currentPcscore = currentPcscore + 1;
 			console.log("Current PC score is " + currentPcscore);
-			pcScoreEle.innerHTML = currentPcscore;
-			
+			pcScoreEle.innerHTML = currentPcscore;		
 		}
 	}
 
@@ -106,8 +105,8 @@ window.onload = function() {
 			return;
 		}
 		if(winner !== 1){
-			setTimeout(pcTurn,1000);
-			setTimeout(checkWin(2),2000);
+			pcTurn();
+			setTimeout(checkWin(2),1000);
 			if(winner === 2){
 				setScore();
 				startNewRound();
