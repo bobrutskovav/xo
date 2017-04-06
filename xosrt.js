@@ -30,14 +30,14 @@ window.onload = function() {
 			currentPscore = currentPscore + 1;
 			console.log("Current player score is " + currentPscore);
 			pScoreEle.innerHTML = currentPscore;
-			startNewRound();
+	
 		} else if (winner === 2) {
 			var pcScoreEle = document.getElementById("pcscore");
 			var currentPcscore = parseInt(pcScoreEle.textContent);
 			currentPcscore = currentPcscore + 1;
 			console.log("Current PC score is " + currentPcscore);
 			pcScoreEle.innerHTML = currentPcscore;
-			startNewRound();
+			
 		}
 	}
 
@@ -69,15 +69,8 @@ window.onload = function() {
 		} else if (matrix[2] == m && matrix[4] == m && matrix[6] == m) {
 			winner = m;
 		}
-		var fCells = getFreeCells();
-		if(fCells.length === 0 && winner === 0){
-			setTimeout(startNewRound(),1000);
-			return;
-		}
+
 		console.log("current winner is " + winner);
-		if(winner !== 0){
-			setScore();
-		}
 	}
 
 
@@ -107,9 +100,23 @@ window.onload = function() {
 		var index = id.split("id")[1] - 1;
 		matrix[index] = 1;
 		checkWin(1);
+		if (winner === 1){
+			setScore();
+			startNewRound();
+			return;
+		}
 		if(winner !== 1){
 			setTimeout(pcTurn,1000);
 			setTimeout(checkWin(2),2000);
+			if(winner === 2){
+				setScore();
+				startNewRound();
+				return;
+			}
+		}
+		if(winner === 0 && getFreeCells().length === 0){
+			startNewRound();
+			return;
 		}
 	}
 
