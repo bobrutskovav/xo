@@ -6,6 +6,8 @@ window.onload = function() {
 	var allCells = document.getElementsByClassName('cell');
 	var matrix = [];
 	var winner = 0;
+	var isGameOver = false;
+
 
 	function fillMatrix() {
 		for (var i = 0; i < allCells.length; i++) {
@@ -15,28 +17,29 @@ window.onload = function() {
 
 	function startNewRound() {
 		console.log("Starting new round...")
-		for(var i = 0;i < allCells.length;i++){
+		for (var i = 0; i < allCells.length; i++) {
 			allCells[i].style.backgroundColor = 'red';
 		}
 		fillMatrix();
 		winner = 0;
+		isGameOver = false;
 	}
+
 
 	function setScore() {
 		if (winner === 1) {
 			var pScoreEle = document.getElementById("playerscore");
-			console.log("Определяю элемент...\n " + pScoreEle);
 			var currentPscore = parseInt(pScoreEle.textContent);
 			currentPscore = currentPscore + 1;
 			console.log("Current player score is " + currentPscore);
 			pScoreEle.innerHTML = currentPscore;
-	
+
 		} else if (winner === 2) {
 			var pcScoreEle = document.getElementById("pcscore");
 			var currentPcscore = parseInt(pcScoreEle.textContent);
 			currentPcscore = currentPcscore + 1;
 			console.log("Current PC score is " + currentPcscore);
-			pcScoreEle.innerHTML = currentPcscore;		
+			pcScoreEle.innerHTML = currentPcscore;
 		}
 	}
 
@@ -73,9 +76,11 @@ window.onload = function() {
 	}
 
 
-
 	function pcTurn() {
 		var fCells = getFreeCells();
+		if (fCells.length === 0) {
+			return;
+		}
 		console.log(fCells);
 		var randomIndex = Math.floor(Math.random() * (fCells.length - 1));
 		var indexInMatrix = fCells[randomIndex];
@@ -83,10 +88,12 @@ window.onload = function() {
 		console.log("PC turns on id" + (indexInMatrix + 1));
 		var cell = document.getElementById('id' + (indexInMatrix + 1));
 		cell.style.backgroundColor = 'yellow';
-
 	}
 
 	function onClick(e) {
+		if (isGameOver) {
+			return;
+		}
 		var currentColor = e.target.style.backgroundColor;
 		if (currentColor == 'blue' || currentColor == 'yellow') {
 			console.log("this cell is already checked!");
@@ -99,22 +106,26 @@ window.onload = function() {
 		var index = id.split("id")[1] - 1;
 		matrix[index] = 1;
 		checkWin(1);
-		if (winner === 1){
+		if (winner === 1) {
+			isGameOver = true;
+			setTimeout(startNewRound, 1500);
 			setScore();
-			startNewRound();
 			return;
 		}
-		if(winner !== 1){
+		if (winner !== 1) {
 			pcTurn();
-			setTimeout(checkWin(2),1000);
-			if(winner === 2){
+			checkWin(2);
+			if (winner === 2) {
+				
+				isGameOver = true;
+				setTimeout(startNewRound, 1500);
 				setScore();
-				startNewRound();
 				return;
 			}
 		}
-		if(winner === 0 && getFreeCells().length === 0){
-			startNewRound();
+		if (winner === 0 && getFreeCells().length === 0) {
+			isGameOver = true;
+			setTimeout(startNewRound, 1500);
 			return;
 		}
 	}
