@@ -8,6 +8,7 @@ window.onload = function() {
 	var winner = 0;
 	var isGameOver = false;
 
+<<<<<<< HEAD
 
 
 
@@ -138,6 +139,8 @@ window.onload = function() {
 
 
 
+=======
+>>>>>>> 3cf256b60509f265328b5b53daa183f7eb7d6171
 
 	function fillMatrix() {
 		for (var i = 0; i < allCells.length; i++) {
@@ -207,6 +210,7 @@ window.onload = function() {
 
 
 	function pcTurn() {
+<<<<<<< HEAD
 		// 		var fCells = getFreeCells();
 		// 		if (fCells.length === 0) {
 		// 			return;
@@ -214,6 +218,15 @@ window.onload = function() {
 		// 		console.log(fCells);
 		// 		var randomIndex = Math.floor(Math.random() * (fCells.length - 1));
 		var indexInMatrix = findBestTurn();
+=======
+		var fCells = getFreeCells();
+		if (fCells.length === 0) {
+			return;
+		}
+		console.log(fCells);
+		var randomIndex = Math.floor(Math.random() * (fCells.length - 1));
+		var indexInMatrix = fCells[randomIndex];
+>>>>>>> 3cf256b60509f265328b5b53daa183f7eb7d6171
 		matrix[indexInMatrix] = 2;
 		console.log("PC turns on id" + (indexInMatrix + 1));
 		var cell = document.getElementById('id' + (indexInMatrix + 1));
@@ -243,11 +256,18 @@ window.onload = function() {
 			return;
 		}
 		if (winner !== 1) {
+<<<<<<< HEAD
 			findBestTurn();
 			pcTurn();
 			checkWin(2);
 			if (winner === 2) {
 
+=======
+			pcTurn();
+			checkWin(2);
+			if (winner === 2) {
+				
+>>>>>>> 3cf256b60509f265328b5b53daa183f7eb7d6171
 				isGameOver = true;
 				setTimeout(startNewRound, 1500);
 				setScore();
