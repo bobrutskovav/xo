@@ -67,10 +67,10 @@ window.onload = function () {
             var currentTree = getTreeMatrix();
             var variants = {};
             for (var line in currentTree) {
-                var enemyMarkersCounter = 0;
                 if (currentTree.hasOwnProperty(line)) {
-                    for (var cell in line) {
-                        if (line.hasOwnProperty(cell) && parseInt(line[cell]) === 1) {
+                  var enemyMarkersCounter = 0;
+                    for (var cell in currentTree[line]) {
+                        if (currentTree[line].hasOwnProperty(cell) && parseInt(currentTree[line][cell]) === 1) {
                             enemyMarkersCounter++;
                         }
                     }
@@ -85,68 +85,81 @@ window.onload = function () {
             var lineToDefence;
             var currentTree = getTreeMatrix();
             for (var line in currentTree) {
-                var enemyMarkersCounter = 0;
                 if (currentTree.hasOwnProperty(line)) {
-                    for (var cell in line) {
-                        if (line.hasOwnProperty(cell) && parseInt(line[cell]) === 1) {
-                            enemyMarkersCounter++;
+                  var enemyMarkersCounter = 0;
+                  var pcMarkerCounter = 0;
+                    for (var cell in currentTree[line]) {
+                        if (currentTree[line].hasOwnProperty(cell)){
+                            if(parseInt(currentTree[line][cell]) === 1) enemyMarkersCounter++;
+                            }
+                            if(parseInt(currentTree[line][cell]) === 2) pcMarkerCounter++;
                         }
+                    if (enemyMarkersCounter === 2 && pcMarkerCounter ===0){
+                      lineToDefence = currentTree[line];
+                      break;
                     }
-                    if (enemyMarkersCounter === 2) lineToDefence = line;
                 }
             }
+        
+          if (lineToDefence === undefined) return;
             for (var cella in lineToDefence) {
                 if (lineToDefence.hasOwnProperty(cella)) {
-                    if (line[cella] === 0) {
-                        return line[cella];
+                    if (lineToDefence[cella] === 0) {
+                        return cella;
                     }
                 }
             }
-
         }
         var variants;
+      
         function getGoodVariant() {
             var goodLine;
             for (var line in variants) {
-               var countOfPCMarkers = 0;
                 if (variants.hasOwnProperty(line)) {
-                    for ( var cell in line) {
-                        if (line.hasOwnProperty(cell)) {
-                            if (cell === 2) countOfPCMarkers++;
+                   var countOfPCMarkers = 0;
+                   var countOfFreeCells = 0;
+                    for ( var cell in variants[line]) {
+                        if (variants[line].hasOwnProperty(cell)) {
+                            if (variants[line][cell] === 2) countOfPCMarkers++;
+                            if (variants[line][cell] === 0) countOfFreeCells++;
                         }
                     }
-                }
-                if (countOfPCMarkers === 2) {
-                    goodLine = line;
+                  if (countOfPCMarkers === 2 && countOfFreeCells === 1 ) {
+                    goodLine = variants[line];
                     break;
+                  }
                 }
             }
-            for (var cella in line) {
-                if (line.hasOwnProperty(cella)) {
-                    if (line[cella] === 0) {
-                        return line[cella];
+          if(goodLine === undefined) return; 
+            for (var cella in goodLine) {
+                if (goodLine.hasOwnProperty(cella)) {
+                    if (goodLine[cella] === 0) {
+                        return cella;
                     }
                 }
             }
         }
 
        
-        var index = getIndexToDefence();
-        if (index === undefined) {
-            variants = getVariants();
-            if (variants.length !== 0) {
-                index = getGoodVariant();
-                if (index === undefined) {
-                    var fCells = getFreeCells();
+      variants = getVariants();
+      var index;
+      if(variants.length !==0){
+        index = getGoodVariant();
+        if(index === undefined){
+          index = getIndexToDefence();
+          if(index === undefined){
+             var fCells = getFreeCells();
                     if (fCells.length === 0) {
                         return;
                     }
                     console.log(fCells);
-                    index = Math.floor(Math.random() * (fCells.length - 1));
-                }
-                return index;
-            }
+                    var rIndex = Math.floor(Math.random() * (fCells.length - 1));
+                    index = fCells[rIndex];
+          }
         }
+      }
+     
+        return index;
     }
 
 
@@ -226,11 +239,13 @@ window.onload = function () {
         // 		console.log(fCells);
         // 		var randomIndex = Math.floor(Math.random() * (fCells.length - 1));
         var indexInMatrix = findBestTurn();
-
+        if(indexInMatrix === undefined){
+          return;
+        }
         // indexInMatrix = fCells[randomIndex];
         matrix[indexInMatrix] = 2;
-        console.log("PC turns on id" + (indexInMatrix + 1));
-        var cell = document.getElementById('id' + (indexInMatrix + 1));
+        console.log("PC turns on id" + (parseInt(indexInMatrix) + 1));
+        var cell = document.getElementById('id' + (parseInt(indexInMatrix) + 1));
         cell.style.backgroundColor = 'yellow';
     }
 
@@ -257,14 +272,9 @@ window.onload = function () {
             return;
         }
         if (winner !== 1) {
-            findBestTurn();
             pcTurn();
             checkWin(2);
             if (winner === 2) {
-                pcTurn();
-                checkWin(2);
-                if (winner === 2) {
-
                     isGameOver = true;
                     setTimeout(startNewRound, 1500);
                     setScore();
@@ -277,7 +287,7 @@ window.onload = function () {
                 return;
             }
         }
-    }
+    
 
 
     console.log(allCells);
@@ -289,3 +299,4 @@ window.onload = function () {
         onClick(e);
     }, true);
 }
+
