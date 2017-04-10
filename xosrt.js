@@ -7,15 +7,13 @@ window.onload = function () {
     var matrix = [];
     var winner = 0;
     var isGameOver = false;
-
-
-    function findBestTurn() {
-
-        function getTreeMatrix() {
+  
+   function getTreeMatrix() {
             function m(n) {
                 return matrix[n];
             }
-
+     
+     
             var tree = {
                 0: {
                     0: m(0),
@@ -61,6 +59,12 @@ window.onload = function () {
             return tree;
         }
 
+
+    function findBestTurn() {
+
+       
+
+
         function getVariants() {
             //Собираем все линии где мы можем победить на данный момент
 
@@ -90,9 +94,9 @@ window.onload = function () {
                   var pcMarkerCounter = 0;
                     for (var cell in currentTree[line]) {
                         if (currentTree[line].hasOwnProperty(cell)){
-                            if(parseInt(currentTree[line][cell]) === 1) enemyMarkersCounter++;
+                            if(currentTree[line][cell] === 1) enemyMarkersCounter++;
                             }
-                            if(parseInt(currentTree[line][cell]) === 2) pcMarkerCounter++;
+                            if(currentTree[line][cell] === 2) pcMarkerCounter++;
                         }
                     if (enemyMarkersCounter === 2 && pcMarkerCounter ===0){
                       lineToDefence = currentTree[line];
@@ -208,22 +212,38 @@ window.onload = function () {
     }
 
     function checkWin(m) {
-        if (matrix[0] == m && matrix[1] == m && matrix[2] == m) {
-            winner = m;
-        } else if (matrix[3] == m && matrix[4] == m && matrix[5] == m) {
-            winner = m;
-        } else if (matrix[6] == m && matrix[7] == m && matrix[8] == m) {
-            winner = m;
-        } else if (matrix[0] == m && matrix[3] == m && matrix[6] == m) {
-            winner = m;
-        } else if (matrix[1] == m && matrix[4] == m && matrix[7] == m) {
-            winner = m;
-        } else if (matrix[2] == m && matrix[5] == m && matrix[8] == m) {
-            winner = m;
-        } else if (matrix[0] == m && matrix[4] == m && matrix[8] == m) {
-            winner = m;
-        } else if (matrix[2] == m && matrix[4] == m && matrix[6] == m) {
-            winner = m;
+//         if (matrix[0] == m && matrix[1] == m && matrix[2] == m) {
+//             winner = m;
+//         } else if (matrix[3] == m && matrix[4] == m && matrix[5] == m) {
+//             winner = m;
+//         } else if (matrix[6] == m && matrix[7] == m && matrix[8] == m) {
+//             winner = m;
+//         } else if (matrix[0] == m && matrix[3] == m && matrix[6] == m) {
+//             winner = m;
+//         } else if (matrix[1] == m && matrix[4] == m && matrix[7] == m) {
+//             winner = m;
+//         } else if (matrix[2] == m && matrix[5] == m && matrix[8] == m) {
+//             winner = m;
+//         } else if (matrix[0] == m && matrix[4] == m && matrix[8] == m) {
+//             winner = m;
+//         } else if (matrix[2] == m && matrix[4] == m && matrix[6] == m) {
+//             winner = m;
+//         }
+      
+      
+        var tree = getTreeMatrix();
+        
+        for (var line in tree){
+          if(tree.hasOwnProperty(line)){
+           var counterToWin = 0;
+            for (var cell in tree[line] ){
+              if (tree[line][cell] === m) counterToWin++;
+            }
+            if (counterToWin === 3){
+              winner = m;
+              break;
+            }
+          }
         }
 
         console.log("current winner is " + winner);
