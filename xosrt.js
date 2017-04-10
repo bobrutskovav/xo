@@ -95,22 +95,22 @@ window.onload = function () {
                     if (enemyMarkersCounter === 2) lineToDefence = line;
                 }
             }
-            for (cell in lineToDefence) {
-                if (lineToDefence.hasOwnProperty(cell)) {
-                    if (line[cell] === 0) {
-                        return line[cell];
+            for (var cella in lineToDefence) {
+                if (lineToDefence.hasOwnProperty(cella)) {
+                    if (line[cella] === 0) {
+                        return line[cella];
                     }
                 }
             }
 
         }
-
+        var variants;
         function getGoodVariant() {
             var goodLine;
-            for (line in variants) {
-                countOfPCMarkers = 0;
+            for (var line in variants) {
+               var countOfPCMarkers = 0;
                 if (variants.hasOwnProperty(line)) {
-                    for (cell in line) {
+                    for ( var cell in line) {
                         if (line.hasOwnProperty(cell)) {
                             if (cell === 2) countOfPCMarkers++;
                         }
@@ -121,16 +121,16 @@ window.onload = function () {
                     break;
                 }
             }
-            for (cell in line) {
-                if (line.hasOwnProperty(cell)) {
-                    if (line[cell] === 0) {
-                        return line[cell];
+            for (var cella in line) {
+                if (line.hasOwnProperty(cella)) {
+                    if (line[cella] === 0) {
+                        return line[cella];
                     }
                 }
             }
         }
 
-        var variants;
+       
         var index = getIndexToDefence();
         if (index === undefined) {
             variants = getVariants();
